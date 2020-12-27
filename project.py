@@ -1,112 +1,154 @@
-class karyawan():
-    def __init__(self, nama, jenis, bonus, potongan):
-        self.nama = nama
-        self.jenis = jenis
+import sqlite3
+
+koneksi = sqlite3.connect('D:/Semester 3/PBO/Project/PBO-JAYA/data.db')
+
+class karyawan:
+    jenis_pekerjaan = []
+
+    def tambahKaryawan(self):
+        global koneksi
+        nama = input('Masukkan nama karyawan : ')
+        jenis = input('Jenis Pekerjaan : ')
+        id_gaji = input('ID gaji : ')
+        karyawan.jenis_pekerjaan.append(jenis)
+        query = f'INSERT INTO karyawan(nama, jenis_Pekerjaan, id_gaji) VALUES ("{nama}", "{jenis}","{id_gaji}")'
+        koneksi.execute(query)
+        koneksi.commit()
+
+    def tambahGaji(self, bonus, potongan):
         self.bonus = bonus
         self.potongan = potongan
-    
-    def getPekerjaan(self):
-        if self.jenis == 'Manager':
-            return (8000000)
-        elif self.jenis == 'Divisi':
-            return (6000000)
-        elif self.jenis == 'Karyawan':
-            return (4000000)
-        elif self.jenis == 'cleaning':
-            return (2000000)
-        return self.jenis
-    
-    def Bonus(self):
+        x = 0
+        p = 0
+        a = 0
+        c = 1000000
         y = 2000000
-        for q in range (0,11):
-            if self.bonus == q:
-                return (y * 10/100)
-        for q in range (10,21):
-            if self.bonus == q:
-                return (y * 20/100)
-        for q in range (20,31):
-            if self.bonus == q:
-                return (y * 30/100)
-        for q in range (30,41):
-            if self.bonus == q:
-                return (y * 40/100)
-        for q in range (40,51):
-            if self.bonus == q:
-                return (y * 50/100)
-        for q in range (50,61):
-            if self.bonus == q:
-                return (y * 60/100)
-        for q in range (60,71):
-            if self.bonus == q:
-                return (y * 70/100)
-        for q in range (70,81):
-            if self.bonus == q:
-                return (y * 80/100)
-        for q in range (80,91):
-            if self.bonus == q:
-                return (y * 90/100)
-        for q in range (90,101):
-            if self.bonus == q:
-                return (y * 100/100)
-        return self.bonus
-
-    def Potongan(self):
-        y = self.getPekerjaan()
-        for q in range (0,11):
+        global koneksi
+        jenis = input('Jenis Pekerjaan : ')
+        if jenis == 'Manager':
+            p = 8000000
+        elif jenis == 'Divisi':
+            p = 6000000
+        elif jenis == 'Karyawan':
+            p = 4000000
+        elif jenis == 'Cleaning':
+            p = 2000000
+        for q in range (1,11):
             if self.potongan == q:
-                return (y * 10/100)
+                a = c * 10/100
         for q in range (10,21):
             if self.potongan == q:
-                return (y * 20/100)
+                a = c * 20/100
         for q in range (20,31):
             if self.potongan == q:
-                return (y * 30/100)
+                a = c * 30/100
         for q in range (30,41):
             if self.potongan == q:
-                return (y * 40/100)
+                a = c * 40/100
         for q in range (40,51):
             if self.potongan == q:
-                return (y * 50/100)
+                a = c * 50/100
         for q in range (50,61):
             if self.potongan == q:
-                return (y * 60/100)
+                a = c * 60/100
         for q in range (60,71):
             if self.potongan == q:
-                return (y * 70/100)
+                a = c * 70/100
         for q in range (70,81):
             if self.potongan == q:
-                return (y * 80/100)
+                a = c * 80/100
         for q in range (80,91):
             if self.potongan == q:
-                return (y * 90/100)
+                a = c * 90/100
         for q in range (90,101):
             if self.potongan == q:
-                return (y * 100/100)
-        return self.potongan
-        
-    def cetak(self):
-        print(
-            'Nama karyawan  \t:',self.nama,
-            '\nJenis Pekerjaan :',self.jenis,
-            '\nBonus \t\t:',self.bonus,'%',
-            '\nPotongan \t:',self.potongan,'%',
-            '\nGaji pokok \t:',self.getPekerjaan(),
-            '\nJumlah Bonus \t:',self.Bonus(),
-            '\nJumlah Potongan :',self.Potongan(),
-            '\nTotal Gaji \t:', self.getPekerjaan() + self.Bonus() - self.Potongan()
-        )
-class gajiKedua(karyawan):
-    def __init__(self, nama, jenis, bonus, potongan):
-        super().__init__(nama, jenis, bonus, potongan)
+                a = c * 100/100
+        for q in range (1,11):
+            if self.bonus == q:
+                x = y * 10/100
+        for q in range (10,21):
+            if self.bonus == q:
+                x = y * 20/100
+        for q in range (20,31):
+            if self.bonus == q:
+                x = y * 30/100
+        for q in range (30,41):
+            if self.bonus == q:
+                x = y * 40/100
+        for q in range (40,51):
+            if self.bonus == q:
+                x = y * 50/100
+        for q in range (50,61):
+            if self.bonus == q:
+                x = y * 60/100
+        for q in range (60,71):
+            if self.bonus == q:
+                x = y * 70/100
+        for q in range (70,81):
+            if self.bonus == q:
+                x = y * 80/100
+        for q in range (80,91):
+            if self.bonus == q:
+                x = y * 90/100
+        for q in range (90,101):
+            if self.bonus == q:
+                x = y * 100/100
+        t = (p + x - a)
+        query = f'INSERT INTO gaji(gaji_Pokok, bonus, potongan, total_GAji) VALUES ("{p}","{x}","{a}","{t}")'
+        koneksi.execute(query)
+        koneksi.commit()
 
-    def getGaji_Kedua(self):
-        return (self.getPekerjaan() + self.Bonus() - self.Potongan())
-        
-    def cetak(self):
-        super().cetak()
+    def dataKaryawan(self):
+        global koneksi
+        for row in koneksi.execute('SELECT * FROM karyawan'):
+            print(row)
 
+    def tampilGaji(self):
+        global koneksi
+        for row in koneksi.execute('SELECT karyawan.id, karyawan.nama, karyawan.jenis_Pekerjaan, gaji.gaji_Pokok, gaji.bonus, gaji.potongan, gaji.total_Gaji FROM karyawan INNER JOIN gaji ON karyawan.id=gaji.id'):
+            print(row)
 
-rtf = karyawan('Rosyad', 'Manager', 6, 50)
-rtf.cetak()
-rtf2 = gajiKedua('Rosyad', 'Divisi',5,10)
-rtf2.cetak()
+    def tampilGajiJenis(self):
+        jenis = input('Jenis Pekerjaan : ')
+        global koneksi
+        if jenis == 'Manager':
+            for row in koneksi.execute("SELECT karyawan.id, karyawan.nama, karyawan.jenis_Pekerjaan, gaji.gaji_Pokok, gaji.bonus, gaji.potongan, gaji.total_Gaji FROM karyawan INNER JOIN gaji ON karyawan.id=gaji.id WHERE karyawan.jenis_Pekerjaan='Manager' AND gaji.gaji_Pokok=8000000"):
+                print(row)
+        if jenis == 'Divisi':
+            for row in koneksi.execute("SELECT karyawan.id, karyawan.nama, karyawan.jenis_Pekerjaan, gaji.gaji_Pokok, gaji.bonus, gaji.potongan, gaji.total_Gaji FROM karyawan INNER JOIN gaji ON karyawan.id=gaji.id WHERE karyawan.jenis_Pekerjaan='Divisi' AND gaji.gaji_Pokok=6000000"):
+                print(row)
+        if jenis == 'Karyawan':
+            for row in koneksi.execute("SELECT karyawan.id, karyawan.nama, karyawan.jenis_Pekerjaan, gaji.gaji_Pokok, gaji.bonus, gaji.potongan, gaji.total_Gaji FROM karyawan INNER JOIN gaji ON karyawan.id=gaji.id WHERE karyawan.jenis_Pekerjaan='Karyawan' AND gaji.gaji_Pokok=4000000"):
+                print(row)
+        if jenis == 'Cleaning':
+            for row in koneksi.execute("SELECT karyawan.id, karyawan.nama, karyawan.jenis_Pekerjaan, gaji.gaji_Pokok, gaji.bonus, gaji.potongan, gaji.total_Gaji FROM karyawan INNER JOIN gaji ON karyawan.id=gaji.id WHERE karyawan.jenis_Pekerjaan='Karyawan' AND gaji.gaji_Pokok=2000000"):
+                print(row)
+
+a = karyawan()
+
+while True :
+    print("\n")
+    print("====== Pilihan Menu ======")
+    print("""
+        1. Tambahkan data Karyawan
+        2. Tambahkan data Gaji Karyawan
+        3. Tampilkan data Karyawan
+        4. Tampilkan data Gaji karyawan
+        5. Tampilkan gaji karyawan menurut jenis pekerjaan
+        99. Exit
+    """)
+    pilihan = int(input('Pilihan: '))
+    if (pilihan == 1):
+        a.tambahKaryawan()
+    elif (pilihan == 2):
+        a.tambahGaji(80, 40)
+    elif (pilihan == 3): 
+        a.dataKaryawan()
+    elif (pilihan == 4):
+        a.tampilGaji()
+    elif (pilihan == 5):
+        a.tampilGajiJenis()
+    elif (pilihan == 99):
+        break
+    else:
+        print('Menu tidak valid!')
