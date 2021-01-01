@@ -1,6 +1,6 @@
 import sqlite3
 
-koneksi = sqlite3.connect('D:/Semester 3/PBO/Project/data.db')
+koneksi = sqlite3.connect('D:/Semester 3/PBO/Project/PBO-JAYA/data.db')
 
 class karyawan:
     def __init__(self, bonus, potongan):
@@ -15,6 +15,7 @@ class karyawan:
         query = f'INSERT INTO karyawan(nama, jenis_Pekerjaan, id_gaji) VALUES ("{nama}", "{jenis}","{id_gaji}")'
         koneksi.execute(query)
         koneksi.commit()
+        print('Data berhasil ditambahkan')
     
     def dataKaryawan(self):
         global koneksi
@@ -28,8 +29,10 @@ class karyawan:
         v = koneksi.cursor()
         v.execute(query,(id,))
         koneksi.commit()
+        print('Data berhasil dihapus')
 
 class Gaji(karyawan):
+    
     def __init__(self, bonus, potongan):
         super().__init__(bonus, potongan)
 
@@ -114,6 +117,7 @@ class Gaji(karyawan):
         query = f'INSERT INTO gaji(gaji_Pokok, bonus, potongan, total_GAji) VALUES ("{p}","{x}","{a}","{t}")'
         koneksi.execute(query)
         koneksi.commit()
+        print('Data berhasil ditambahkan')
 
     def tampilGaji(self):
         global koneksi
@@ -154,6 +158,7 @@ class Gaji(karyawan):
         v = koneksi.cursor()
         v.execute(query,(id,))
         koneksi.commit()
+        print('Data berhasil dihapus')
 
 a = Gaji(70, 10)
 
@@ -190,7 +195,7 @@ while True :
     elif (pilihan == 8):
         a.deleteKaryawan()
     elif (pilihan == 9):
-        a.deleteGaji
+        a.deleteGaji()
     elif (pilihan == 99):
         break
     else:
