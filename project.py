@@ -3,21 +3,37 @@ import sqlite3
 koneksi = sqlite3.connect('D:/Semester 3/PBO/Project/data.db')
 
 class karyawan:
-    jenis_pekerjaan = []
+    def __init__(self, bonus, potongan):
+        self.bonus = bonus
+        self.potongan = potongan
 
     def tambahKaryawan(self):
         global koneksi
         nama = input('Masukkan nama karyawan : ')
         jenis = input('Jenis Pekerjaan : ')
         id_gaji = input('ID gaji : ')
-        karyawan.jenis_pekerjaan.append(jenis)
         query = f'INSERT INTO karyawan(nama, jenis_Pekerjaan, id_gaji) VALUES ("{nama}", "{jenis}","{id_gaji}")'
         koneksi.execute(query)
         koneksi.commit()
+    
+    def dataKaryawan(self):
+        global koneksi
+        for row in koneksi.execute('SELECT * FROM karyawan'):
+            print(row)
 
-    def tambahGaji(self, bonus, potongan):
-        self.bonus = bonus
-        self.potongan = potongan
+    def deleteKaryawan(self):
+        global koneksi
+        id = input('Masukkan ID : ')
+        query = 'DELETE FROM karyawan WHERE karyawan.id=?'
+        v = koneksi.cursor()
+        v.execute(query,(id,))
+        koneksi.commit()
+
+class Gaji(karyawan):
+    def __init__(self, bonus, potongan):
+        super().__init__(bonus, potongan)
+
+    def tambahGaji(self):
         x = 0
         p = 0
         a = 0
@@ -63,6 +79,7 @@ class karyawan:
         for q in range (90,101):
             if self.potongan == q:
                 a = c * 100/100
+
         for q in range (1,11):
             if self.bonus == q:
                 x = y * 10/100
@@ -98,11 +115,6 @@ class karyawan:
         koneksi.execute(query)
         koneksi.commit()
 
-    def dataKaryawan(self):
-        global koneksi
-        for row in koneksi.execute('SELECT * FROM karyawan'):
-            print(row)
-
     def tampilGaji(self):
         global koneksi
         for row in koneksi.execute('SELECT karyawan.id, karyawan.nama, karyawan.jenis_Pekerjaan, gaji.gaji_Pokok, gaji.bonus, gaji.potongan, gaji.total_Gaji FROM karyawan INNER JOIN gaji ON karyawan.id=gaji.id'):
@@ -124,7 +136,26 @@ class karyawan:
             for row in koneksi.execute("SELECT karyawan.id, karyawan.nama, karyawan.jenis_Pekerjaan, gaji.gaji_Pokok, gaji.bonus, gaji.potongan, gaji.total_Gaji FROM karyawan INNER JOIN gaji ON karyawan.id=gaji.id WHERE karyawan.jenis_Pekerjaan='Karyawan' AND gaji.gaji_Pokok=2000000"):
                 print(row)
 
-a = karyawan()
+    def getDataGaji(self):
+        global koneksi
+        for row in koneksi.execute('SELECT * FROM gaji'):
+            print(row)
+    
+    def getGajiID(self):
+        id = input('Masukkan ID : ')
+        global koneksi
+        for row in koneksi.execute(f"SELECT karyawan.id, karyawan.nama, karyawan.jenis_Pekerjaan, gaji.gaji_Pokok, gaji.bonus, gaji.potongan, gaji.total_Gaji FROM karyawan INNER JOIN gaji ON karyawan.id=gaji.id WHERE karyawan.id='{id}' AND gaji.id={id}"):
+                print(row)
+
+    def deleteGaji(self):
+        global koneksi
+        id = input('Masukkan ID : ')
+        query = 'DELETE FROM gaji WHERE gaji.id=?'
+        v = koneksi.cursor()
+        v.execute(query,(id,))
+        koneksi.commit()
+
+a = Gaji(70, 10)
 
 while True :
     print("\n")
@@ -135,19 +166,31 @@ while True :
         3. Tampilkan data Karyawan
         4. Tampilkan data Gaji karyawan
         5. Tampilkan gaji karyawan menurut jenis pekerjaan
+        6. Tampilkan daftar gaji
+        7. Tampilkan Gaji menurut ID
+        8. Menghapus data karyawan
+        9. Menghapus data gaji
         99. Exit
     """)
     pilihan = int(input('Pilihan: '))
     if (pilihan == 1):
         a.tambahKaryawan()
     elif (pilihan == 2):
-        a.tambahGaji(80, 40)
+        a.tambahGaji()
     elif (pilihan == 3): 
         a.dataKaryawan()
     elif (pilihan == 4):
         a.tampilGaji()
     elif (pilihan == 5):
         a.tampilGajiJenis()
+    elif (pilihan == 6):
+        a.getDataGaji()
+    elif (pilihan == 7):
+        a.getGajiID()
+    elif (pilihan == 8):
+        a.deleteKaryawan()
+    elif (pilihan == 9):
+        a.deleteGaji
     elif (pilihan == 99):
         break
     else:
