@@ -3,14 +3,18 @@ import sqlite3
 koneksi = sqlite3.connect('D:/Semester 3/PBO/Project/PBO-JAYA/data.db')
 
 class karyawan:
-    def __init__(self, bonus, potongan):
+    def __init__(self, bonus, potongan, jenisPekerjaan):
         self.bonus = bonus
         self.potongan = potongan
+        self.__jenisPekerjaan = jenisPekerjaan
+
+    def getJenisPekerjaan(self):
+        return self.__jenisPekerjaan
 
     def tambahKaryawan(self):
         global koneksi
         nama = input('Masukkan nama karyawan : ')
-        jenis = input('Jenis Pekerjaan : ')
+        jenis = self.getJenisPekerjaan()
         id_gaji = input('ID gaji : ')
         query = f'INSERT INTO karyawan(nama, jenis_Pekerjaan, id_gaji) VALUES ("{nama}", "{jenis}","{id_gaji}")'
         koneksi.execute(query)
@@ -32,9 +36,9 @@ class karyawan:
         print('Data berhasil dihapus')
 
 class Gaji(karyawan):
-    
-    def __init__(self, bonus, potongan):
-        super().__init__(bonus, potongan)
+
+    def __init__(self, bonus, potongan, jenisPekerjaan):
+        super().__init__(bonus, potongan, jenisPekerjaan)
 
     def tambahGaji(self):
         x = 0
@@ -160,7 +164,7 @@ class Gaji(karyawan):
         koneksi.commit()
         print('Data berhasil dihapus')
 
-a = Gaji(70, 10)
+a = Gaji(70, 10, 'Karyawan')
 
 while True :
     print("\n")
