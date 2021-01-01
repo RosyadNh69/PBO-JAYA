@@ -1,6 +1,6 @@
 import sqlite3
 
-koneksi = sqlite3.connect('D:/Semester 3/PBO/Project/PBO-JAYA/data.db')
+koneksi = sqlite3.connect('D:/Semester 3/PBO/Project/data.db')
 
 class karyawan:
     jenis_pekerjaan = []
