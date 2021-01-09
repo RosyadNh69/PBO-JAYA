@@ -1,6 +1,7 @@
 import sqlite3
+import datetime
 
-koneksi = sqlite3.connect('D:/Semester 3/PBO/Project/PBO-JAYA/data.db')
+koneksi = sqlite3.connect('data.db')
 
 class karyawan:
     def __init__(self, bonus, potongan, jenisPekerjaan):
@@ -16,14 +17,17 @@ class karyawan:
         nama = input('Masukkan nama karyawan : ')
         jenis = self.getJenisPekerjaan()
         id_gaji = input('ID gaji : ')
+        tgl = datetime.date.today()
         query = f'INSERT INTO karyawan(nama, jenis_Pekerjaan, id_gaji) VALUES ("{nama}", "{jenis}","{id_gaji}")'
+        x = f'INSERT INTO hari(tanggal_bekerja) VALUES ("{tgl}")'
+        koneksi.execute(x)
         koneksi.execute(query)
         koneksi.commit()
         print('Data berhasil ditambahkan')
     
     def dataKaryawan(self):
         global koneksi
-        for row in koneksi.execute('SELECT * FROM karyawan'):
+        for row in koneksi.execute('SELECT karyawan.id, karyawan.nama, karyawan.jenis_pekerjaan, hari.tanggal_bekerja FROM karyawan INNER JOIN hari ON karyawan.id=hari.id'): 
             print(row)
 
     def deleteKaryawan(self):
@@ -34,6 +38,17 @@ class karyawan:
         v.execute(query,(id,))
         koneksi.commit()
         print('Data berhasil dihapus')
+
+class tanggal(karyawan):
+    def __init__(self, bonus, potongan, jenisPekerjaan):
+        super().__init__(bonus, potongan, jenisPekerjaan)
+
+    def tanggalMasuk(self):
+        global koneksi
+        tgl = datetime.date.today()
+        query = f'INSERT INTO hari(tanggal_bekerja) VALUES ("{tgl}")'
+        koneksi.execute(query)
+        koneksi.commit()
 
 class Gaji(karyawan):
 
@@ -123,9 +138,19 @@ class Gaji(karyawan):
         koneksi.commit()
         print('Data berhasil ditambahkan')
 
+    def ubahGaji(self):
+        global koneksi
+        id = int(input('Masukkan ID: '))
+        gaji = int(input('Gaji Baru: '))
+        bonus = int(input('Masukkan Bonus: '))
+        potongan = int(input('Masukkan potongan: '))
+        total = gaji + bonus - potongan
+        koneksi.execute('UPDATE gaji SET gaji_Pokok=?, bonus=?, potongan=?, total_Gaji=? WHERE gaji.id=?', (gaji, bonus, potongan, total, id)) 
+        koneksi.commit()
+
     def tampilGaji(self):
         global koneksi
-        for row in koneksi.execute('SELECT karyawan.id, karyawan.nama, karyawan.jenis_Pekerjaan, gaji.gaji_Pokok, gaji.bonus, gaji.potongan, gaji.total_Gaji FROM karyawan INNER JOIN gaji ON karyawan.id=gaji.id'):
+        for row in koneksi.execute('SELECT karyawan.id, karyawan.nama, karyawan.jenis_Pekerjaan, gaji.gaji_Pokok, gaji.bonus, gaji.potongan, gaji.total_Gaji, hari.tanggal_bekerja FROM karyawan INNER JOIN gaji ON karyawan.id=gaji.id INNER JOIN hari ON karyawan.id=hari.id'):
             print(row)
 
     def tampilGajiJenis(self):
@@ -164,7 +189,7 @@ class Gaji(karyawan):
         koneksi.commit()
         print('Data berhasil dihapus')
 
-a = Gaji(70, 10, 'Karyawan')
+a = Gaji(90, 0, 'Divisi')
 
 while True :
     print("\n")
@@ -179,6 +204,7 @@ while True :
         7. Tampilkan Gaji menurut ID
         8. Menghapus data karyawan
         9. Menghapus data gaji
+        10. Mengubah Gaji karyawan
         99. Exit
     """)
     pilihan = int(input('Pilihan: '))
@@ -200,7 +226,8 @@ while True :
         a.deleteKaryawan()
     elif (pilihan == 9):
         a.deleteGaji()
-    elif (pilihan == 99):
+    elif (pilihan == 10):
+        a.ubahGaji()
         break
     else:
         print('Menu tidak valid!')
